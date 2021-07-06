@@ -10,3 +10,9 @@ defp deps() do
     {:actioncable, "~> 0.1.0"}
   ]
 ```
+
+Then, run `mix deps.get` in your shell to fetch the new dependencies.
+
+
+## Usage
+
