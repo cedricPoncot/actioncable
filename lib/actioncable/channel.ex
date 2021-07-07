@@ -1,4 +1,7 @@
-defmodule ActioncableWeb.Channel do
+defmodule Actioncable.Channel do
+  @moduledoc """
+  This module handles Channel Websocket using Redis connection
+  """
   def subscribe(channel, pid) do
     pids = get_channel(channel)
     if pids != nil do
@@ -33,7 +36,13 @@ defmodule ActioncableWeb.Channel do
       nil
     end
   end
+  @doc """
+  ## Examples
+    iex> ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})
+    iex> ActioncableWeb.Channel("room_1", %{"action"=>"write"})
 
+    Broadcast message to all subscriber from given channel. 
+  """
   def broadcast(channel, message) do
     pids = get_channel(channel)
     unless pids == nil do

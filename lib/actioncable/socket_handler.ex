@@ -1,4 +1,4 @@
-defmodule ActioncableWeb.SocketHandler do
+defmodule Actioncable.SocketHandler do
   @behaviour :cowboy_websocket
   @heartbeat_interval 3000
 
