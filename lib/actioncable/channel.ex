@@ -7,11 +7,11 @@ defmodule Actioncable.Channel do
     if pids != nil do
       if !Enum.member?(pids, pid) do
         pids = Poison.encode!(pids ++ [pid])
-        {:ok, _} = Redix.command(:redix, ["SET", channel, pids])
+        {:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
       end
     else
       pids = Poison.encode!([pid])
-      {:ok, _} = Redix.command(:redix, ["SET", channel, pids])
+      {:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
     end
   end
 
@@ -20,16 +20,16 @@ defmodule Actioncable.Channel do
     if pids != nil && Enum.member?(pids, pid) do
       pids = Enum.filter(pids, fn x -> x != pid && x != nil end)
       if pids == [] do
-        {:ok, _} = Redix.command(:redix, ["SET", channel, nil])
+        {:ok, _} = Redix.command(:redix_ac, ["SET", channel, nil])
       else
         pids = Poison.encode!(pids)
-        {:ok, _} = Redix.command(:redix, ["SET", channel, pids])
+        {:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
       end
     end
   end
 
   def get_channel(channel) do
-    {:ok, pids} = Redix.command(:redix, ["GET", channel])
+    {:ok, pids} = Redix.command(:redix_ac, ["GET", channel])
     if pids != nil && pids != "" do
       Poison.decode!(pids)
     else
@@ -38,8 +38,8 @@ defmodule Actioncable.Channel do
   end
   @doc """
   ## Examples
-    iex> ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})
-    iex> ActioncableWeb.Channel("room_1", %{"action"=>"write"})
+    iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})``` \n
+    iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write"})```
 
     Broadcast message to all subscriber from given channel. 
   """

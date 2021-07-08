@@ -1,4 +1,11 @@
 defmodule Actioncable.SocketHandler do
+  @moduledoc """
+  This module handles:
+  - Socket initialization with actioncable protocol. (Switching protocol)
+  - Message from client
+  - Message to client
+  This module DON'T handles token in url (like example.com/cable?token=aaa)
+  """
   @behaviour :cowboy_websocket
   @heartbeat_interval 3000
 
@@ -77,7 +84,7 @@ defmodule Actioncable.SocketHandler do
       state = Map.put(state, "channel", channel0 ++ [name])
       state = add_id(state, channel)
 
-      ActioncableWeb.Channel.subscribe(name, :erlang.pid_to_list(state["pid"]))
+      Actioncable.Channel.subscribe(name, :erlang.pid_to_list(state["pid"]))
       {:reply, {:text, response}, state}
     else
       {:reply, {:text, ""}, state}
@@ -110,7 +117,7 @@ defmodule Actioncable.SocketHandler do
   end
 
   def unsubscribe_all([head|tail], pid) do
-    ActioncableWeb.Channel.unsubscribe(head, :erlang.pid_to_list(pid))
+    Actioncable.Channel.unsubscribe(head, :erlang.pid_to_list(pid))
     unsubscribe_all(tail, pid)
   end
 
