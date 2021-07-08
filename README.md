@@ -91,7 +91,13 @@ It will clean redis database 15 at every start.
 
 - Receive message : As seen above, every message will be transfered in this function : `handle_client_message(message)` (In `SocketHandler` module)
 
-- Send message : use `Actioncable.Channel.broadcast(channel, message)` See doc in hex.pm for this function
+- Send message : use `Actioncable.Channel.broadcast(channel, message)`
+
+  Example:
+  iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})``` \n
+  iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write"})```
+
+  Broadcast message to all subscriber from given channel. 
 
 
 ### Improvement
