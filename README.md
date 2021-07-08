@@ -2,7 +2,7 @@
 
 ## Installation
 
-Add the `:actioncable` dependency to your mix.exs file
+### - 1) Add the `:actioncable` dependency to your mix.exs file
 
 ```elixir
 defp deps() do
@@ -14,9 +14,7 @@ defp deps() do
 Then, run `mix deps.get` in your shell to fetch the new dependencies.
 
 
-## Usage
-
-- Add this configuration in config/config.ex,
+### - 2) Add this configuration in config/config.ex,
 
 ```elixir
 config :your_application_name, Your_application_name_Web.Endpoint,
@@ -24,7 +22,7 @@ config :your_application_name, Your_application_name_Web.Endpoint,
     http: [
       dispatch: [
         {:_, [
-          {"/cable", Actioncable.SocketHandler, []},
+          {"/cable", SocketHandler, []},
           {:_, Phoenix.Endpoint.Cowboy2Handler, {Your_application_name_Web.Endpoint, []}}
         ]}
       ]
@@ -34,6 +32,24 @@ config :your_application_name, Your_application_name_Web.Endpoint,
 
 It will redirect every url ending by "/cable" to Cowboy Websocket Handler.
 Other url will be redirect in your Endpoint as usual.
+
+### - 3) Create module : `Your_application_name_Web.SocketHandler`
+
+```elixir
+defmodule SocketHandler do
+  use Actioncable.SocketHandler
+
+  def handle_client_message(message) do
+    #Handle message from JS client the way you want it ;)
+    IO.inspect message
+  end
+
+end
+
+```
+
+This module has to `use Actioncable.SocketHandler`and implement `handle_client_message`function.
+
 
 - Start a Redix connection named `:redix_ac`, it will be used for storing websocket pid in corresponding channel.
 
@@ -70,3 +86,13 @@ end
 
 It will clean redis database 15 at every start.
 
+### Usage
+
+- Receive message : As seen below, every message will be transfered in this function : `handle_client_message(message)` (In `SocketHandler` module)
+
+- Send message : use `Actioncable.Channel.broadcast(channel, message)` See doc in hex.pm for this function
+
+
+### Improvement
+
+- Do not hesitate to perform pull request, this is a first version and there is a lot of thing that needs to be improved
