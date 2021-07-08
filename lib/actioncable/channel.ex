@@ -38,8 +38,8 @@ defmodule Actioncable.Channel do
   end
   @doc """
   ## Examples
-    iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})``` \n
-    iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write"})```
+    iex> ```Actioncable.Channel("room_1", %{"action"=>"write", "args" => "hello"})``` \n
+    iex> ```Actioncable.Channel("room_1", %{"action"=>"write"})```
 
     Broadcast message to all subscriber from given channel. 
   """
