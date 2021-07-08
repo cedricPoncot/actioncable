@@ -51,7 +51,8 @@ end
 This module has to `use Actioncable.SocketHandler`and implement `handle_client_message`function.
 
 
-- Start a Redix connection named `:redix_ac`, it will be used for storing websocket pid in corresponding channel.
+### - 4) Start a Redix connection named `:redix_ac`
+(it will be used for storing websocket pid in corresponding channel.)
 
 In your application.ex :
 
@@ -88,11 +89,11 @@ It will clean redis database 15 at every start.
 
 ### Usage
 
-- Receive message : As seen below, every message will be transfered in this function : `handle_client_message(message)` (In `SocketHandler` module)
+- Receive message : As seen above, every message will be transfered in this function : `handle_client_message(message)` (In `SocketHandler` module)
 
 - Send message : use `Actioncable.Channel.broadcast(channel, message)` See doc in hex.pm for this function
 
 
 ### Improvement
 
-- Do not hesitate to perform pull request, this is a first version and there is a lot of thing that needs to be improved
+- Do not hesitate to perform pull request, this is a first version and there are a lot of things that need to be improved
