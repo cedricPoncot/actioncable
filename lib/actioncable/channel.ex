@@ -58,6 +58,6 @@ defmodule Actioncable.Channel do
     channel_send(tail, message)
   end
 
-  def channel_send([], message) do
+  def channel_send([], _message) do
   end
 end
