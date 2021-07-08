@@ -94,7 +94,9 @@ It will clean redis database 15 at every start.
 - Send message : use `Actioncable.Channel.broadcast(channel, message)`
 
   Example:
-  iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})``` \n
+
+  iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})```
+
   iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write"})```
 
   Broadcast message to all subscriber from given channel. 
