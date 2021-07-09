@@ -77,25 +77,25 @@ It will clean redis database 15 at every start.
 
 If the JS client subscribe with `{channel: "XXX", id: "XXX"}` :
 
-  use `Actioncable.Channel.broadcast(channel, id, message)`
+   use `Actioncable.Channel.broadcast(channel, id, message)`
 
     Example:
 
-    iex> ```Actioncable.Channel.broadcast("room", "1", %{"action"=>"write", "args" => "hello"})```
+    iex> ```elixir Actioncable.Channel.broadcast("room", "1", %{"action"=>"write", "args" => "hello"})```
 
-    iex> ```Actioncable.Channel.broadcast("room", "1", %{"action"=>"write"})```
+    iex> ```elixir Actioncable.Channel.broadcast("room", "1", %{"action"=>"write"})```
 
     Broadcast message to all subscriber from given channel.
 
 else (subscription in JS with channel only)
 
-  use `Actioncable.Channel.broadcast(channel, message)`
+   use `Actioncable.Channel.broadcast(channel, message)`
 
     Example:
 
-    iex> ```Actioncable.Channel.broadcast("room_1", %{"action"=>"write", "args" => "hello"})```
+    iex> ```elixir Actioncable.Channel.broadcast("room_1", %{"action"=>"write", "args" => "hello"})```
 
-    iex> ```Actioncable.Channel.broadcast("room_1", %{"action"=>"write"})```
+    iex> ```elixir Actioncable.Channel.broadcast("room_1", %{"action"=>"write"})```
 
     Broadcast message to all subscriber from given channel. 
 
