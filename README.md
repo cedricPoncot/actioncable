@@ -95,9 +95,9 @@ It will clean redis database 15 at every start.
 
   Example:
 
-  iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write", "args" => "hello"})```
+  iex> ```Actioncable.Channel("room_1", %{"action"=>"write", "args" => "hello"})```
 
-  iex> ```ActioncableWeb.Channel("room_1", %{"action"=>"write"})```
+  iex> ```Actioncable.Channel("room_1", %{"action"=>"write"})```
 
   Broadcast message to all subscriber from given channel. 
 
