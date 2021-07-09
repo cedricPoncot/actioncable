@@ -67,40 +67,37 @@ def start(_type, _args) do
 end
 ```
 
-Note: in this case, i'm using redis database number 15. If the server shut down brutally, you may want to clean the different channel.
-You can do the following (You have to be sure that your redis database -in this case the redis database 15-  does not store any other data) :
-
-```elixir
-def start(_type, _args) do
-  children = [
-    %{
-      id: Redix,
-      start: {Redix, :start_link, ["redis://localhost:6379/15", [name: :redix_ac]]}
-    }
-  ]
-  opts = [strategy: :one_for_one, name: XXX.Supervisor]
-  ret = XXX.start_link(children, opts)
-  Redix.command!(:redix_ac, ["flushdb"])
-  ret
-end
-```
-
 It will clean redis database 15 at every start.
 
 ### Usage
 
 - Receive message : As seen above, every message will be transfered in this function : `handle_client_message(message)` (In `SocketHandler` module)
 
-- Send message : use `Actioncable.Channel.broadcast(channel, message)`
+- Send message: 
 
-  Example:
+If the JS client subscribe with `{channel: "XXX", id: "XXX"}` :
 
-  iex> ```Actioncable.Channel.broadcast("room_1", %{"action"=>"write", "args" => "hello"})```
+  use `Actioncable.Channel.broadcast(channel, id, message)`
 
-  iex> ```Actioncable.Channel.broadcast("room_1", %{"action"=>"write"})```
+    Example:
 
-  Broadcast message to all subscriber from given channel. 
+    iex> ```Actioncable.Channel.broadcast("room", "1", %{"action"=>"write", "args" => "hello"})```
 
+    iex> ```Actioncable.Channel.broadcast("room", "1", %{"action"=>"write"})```
+
+    Broadcast message to all subscriber from given channel.
+
+else (subscription in JS with channel only)
+
+  use `Actioncable.Channel.broadcast(channel, message)`
+
+    Example:
+
+    iex> ```Actioncable.Channel.broadcast("room_1", %{"action"=>"write", "args" => "hello"})```
+
+    iex> ```Actioncable.Channel.broadcast("room_1", %{"action"=>"write"})```
+
+    Broadcast message to all subscriber from given channel. 
 
 ### Improvement
 

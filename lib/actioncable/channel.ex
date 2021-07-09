@@ -46,18 +46,43 @@ defmodule Actioncable.Channel do
   def broadcast(channel, message) do
     pids = get_channel(channel)
     unless pids == nil do
-      channel_send(pids, message)
+      channel_send(pids, channel, message)
     end
   end
 
-  def channel_send([head|tail], message) do
+  def broadcast(channel, id, message) do
+    pids = get_channel("#{channel}_#{id}")
+    unless pids == nil do
+      channel_send(pids, channel, id, message)
+    end
+  end
+
+  def channel_send([head|tail], channel, message) do
     pid = :erlang.list_to_pid(head)
     if Process.alive?(pid) do
+      message = Map.put(message, "channel", channel)
       send :erlang.list_to_pid(head), message
+    else
+      unsubscribe(channel, pid)
     end
-    channel_send(tail, message)
+    channel_send(tail, channel, message)
   end
 
-  def channel_send([], _message) do
+  def channel_send([], _channel, _message) do
+  end
+
+  def channel_send([head|tail], channel, id, message) do
+    pid = :erlang.list_to_pid(head)
+    if Process.alive?(pid) do
+      message = Map.put(message, "channel", channel)
+      message = Map.put(message, "id", id)
+      send :erlang.list_to_pid(head), message
+    else
+      unsubscribe("#{channel}_#{id}", pid)
+    end
+    channel_send(tail, channel, id, message)
+  end
+
+  def channel_send([], _channel, _id, _message) do
   end
 end

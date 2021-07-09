@@ -42,14 +42,26 @@ defmodule Actioncable.SocketHandler do
         {:reply, {:text, "{\"type\":\"welcome\"}"}, req}
       end
 
-      def websocket_info(%{"action" => _action, "args" => _text} = message, state) do
-        resp = %{"identifier" => "{\"channel\":\"PlayersChannel\",\"id\":#{state["id"]}}", "message" => message}
+      def websocket_info(%{"action" => action, "args" => args, "channel" => channel}, state) do
+        resp = %{"identifier" => "{\"channel\":\"#{channel}\"}", "message" => %{"action" => action, "args" => args}}
         message = Poison.encode!(resp)
         {:reply, {:text, message}, state}
       end
 
-      def websocket_info(%{"action" => _action} = message, state) do
-        resp = %{"identifier" => "{\"channel\":\"PlayersChannel\",\"id\":#{state["id"]}}", "message" => message}
+      def websocket_info(%{"action" => action, "channel" => channel}, state) do
+        resp = %{"identifier" => "{\"channel\":\"#{channel}\"}", "message" => %{"action" => action}}
+        message = Poison.encode!(resp)
+        {:reply, {:text, message}, state}
+      end
+
+      def websocket_info(%{"action" => action, "args" => args, "channel" => channel, "id" => id}, state) do
+        resp = %{"identifier" => "{\"channel\":\"#{channel}\",\"id\":#{id}}", "message" => %{"action" => action, "args" => args}}
+        message = Poison.encode!(resp)
+        {:reply, {:text, message}, state}
+      end
+
+      def websocket_info(%{"action" => action, "channel" => channel, "id" => id}, state) do
+        resp = %{"identifier" => "{\"channel\":\"#{channel}\",\"id\":#{id}}", "message" => %{"action" => action}}
         message = Poison.encode!(resp)
         {:reply, {:text, message}, state}
       end
@@ -63,20 +75,20 @@ defmodule Actioncable.SocketHandler do
       #Client to server
       def websocket_handle({:text, message}, state) do
         message = Poison.decode!(message)
-        handle_client_message(message)
         case message["command"] do
           "subscribe" ->
             subscription(message, state)
           "unsubscribe" ->
+            handle_client_message(message)
             unsubscription(message, state)
           _ ->
+            handle_client_message(message)
             {:ok, state}
         end
       end
 
       def subscription(message, state) do
         if message["identifier"] do
-          #Actioncable.ActionHandler.subscribe(message, true)
           response = %{"identifier" => message["identifier"], "type" => "confirm_subscription"}
           response = Poison.encode!(response)
           channel = message["identifier"]
@@ -85,10 +97,11 @@ defmodule Actioncable.SocketHandler do
           channel0 = state["channel"]
           state = Map.put(state, "channel", channel0 ++ [name])
           state = add_id(state, channel)
-
           Actioncable.Channel.subscribe(name, :erlang.pid_to_list(state["pid"]))
+          handle_client_message(message)
           {:reply, {:text, response}, state}
         else
+          handle_client_message(message)
           {:reply, {:text, ""}, state}
         end
       end
@@ -113,7 +126,13 @@ defmodule Actioncable.SocketHandler do
         {:ok, state}
       end
 
-      def terminate(_reason, _req, state) do
+      def terminate(reason, _req, state) do
+        terminate_message = %{
+          "command" => "close_connection",
+          "identifier" => state["pid"],
+          "reason" => reason
+        }
+        handle_client_message(terminate_message)
         unsubscribe_all(state["channel"], state["pid"])
         :ok
       end
