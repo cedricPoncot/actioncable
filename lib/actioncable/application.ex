@@ -15,10 +15,10 @@ defmodule Actioncable.Application do
     children = [
       # Starts a worker by calling: Actioncable.Worker.start_link(arg)
       # {Actioncable.Worker, arg},
-      %{
-        id: Redix,
-        start: {Redix, :start_link, ["redis://localhost:6379/15", [name: :redix_ac]]}
-      }
+      # %{
+      #   id: Redix,
+      #   start: {Redix, :start_link, ["redis://localhost:6379/15", [name: :redix_ac]]}
+      # }
     ]
 
     # See https://hexdocs.pm/elixir/Actioncable.html
