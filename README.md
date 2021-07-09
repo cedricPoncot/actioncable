@@ -61,13 +61,12 @@ def start(_type, _args) do
   children = [
     %{
       id: Redix,
-      start: {Redix, :start_link, ["redis://localhost:6379/15", [name: :redix_ac]]}
+      start: {Redix, :start_link, ["redis://localhost:6379/0", [name: :redix_ac]]}
     }
   ]
 end
 ```
-
-It will clean redis database 15 at every start.
+Of course, you can use any valid redis uri. You just have to name it :redix_ac (as seen in previous example)
 
 ### Usage
 
