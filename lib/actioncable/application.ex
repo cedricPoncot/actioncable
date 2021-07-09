@@ -12,7 +12,7 @@ defmodule Actioncable.Application do
       # {Actioncable.Worker, arg},
       %{
         id: Redix,
-        start: {Redix, :start_link, ["redis://localhost:6379/15", [name: :redix]]}
+        start: {Redix, :start_link, ["redis://localhost:6379/15", [name: :redix_ac]]}
       }
     ]
 
