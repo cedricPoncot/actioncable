@@ -7,7 +7,7 @@
 ```elixir
 defp deps() do
   [
-    {:actioncable, "~> 0.1.0"}
+    {:actioncable, "~> 0.2.0"}
   ]
 ```
 
@@ -66,7 +66,7 @@ def start(_type, _args) do
   ]
 end
 ```
-Of course, you can use any valid redis uri. You just have to name it :redix_ac (as seen in previous example)
+Of course, you can use any valid redis uri ("redis://localhost:6379/0" is just an example). You just have to name the redis connection :redix_ac.
 
 ### Usage
 
