@@ -134,7 +134,8 @@ defmodule Actioncable.SocketHandler do
       def unsubscribe_all([head|tail], pid) do
         terminate_message = %{
           "command" => "close_connection",
-          "identifier" => head,
+          "channel" => head,
+          "pid" => pid,
           "reason" => reason
         }
         Actioncable.Channel.unsubscribe(head, :erlang.pid_to_list(pid))
