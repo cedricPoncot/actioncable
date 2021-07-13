@@ -127,11 +127,11 @@ defmodule Actioncable.SocketHandler do
       end
 
       def terminate(reason, _req, state) do
-        unsubscribe_all(state["channel"], state["pid"])
+        unsubscribe_all(state["channel"], state["pid"], reason)
         :ok
       end
 
-      def unsubscribe_all([head|tail], pid) do
+      def unsubscribe_all([head|tail], pid, reason) do
         terminate_message = %{
           "command" => "close_connection",
           "channel" => head,
@@ -143,7 +143,7 @@ defmodule Actioncable.SocketHandler do
         unsubscribe_all(tail, pid)
       end
 
-      def unsubscribe_all([], _pid) do
+      def unsubscribe_all([], _pid, _reason) do
 
       end
     end
