@@ -17,13 +17,13 @@ Then, run `mix deps.get` in your shell to fetch the new dependencies.
 ### - 2) Add this configuration in config/config.ex,
 
 ```elixir
-config :your_application_name, Your_application_name_Web.Endpoint,
+config :application, ApplicationWeb.Endpoint,
   check_origin: false,
     http: [
       dispatch: [
         {:_, [
           {"/cable", SocketHandler, []},
-          {:_, Phoenix.Endpoint.Cowboy2Handler, {Your_application_name_Web.Endpoint, []}}
+          {:_, Phoenix.Endpoint.Cowboy2Handler, {ApplicationWeb.Endpoint, []}}
         ]}
       ]
     ],
@@ -33,7 +33,7 @@ config :your_application_name, Your_application_name_Web.Endpoint,
 It will redirect every url ending by "/cable" to Cowboy Websocket Handler.
 Other url will be redirect in your Endpoint as usual.
 
-### - 3) Create module : `Your_application_name_Web.SocketHandler`
+### - 3) Create module : `SocketHandler`
 
 ```elixir
 defmodule SocketHandler do
