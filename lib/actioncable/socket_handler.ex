@@ -140,7 +140,7 @@ defmodule Actioncable.SocketHandler do
         }
         Actioncable.Channel.unsubscribe(head, :erlang.pid_to_list(pid))
         handle_client_message(terminate_message)
-        unsubscribe_all(tail, pid)
+        unsubscribe_all(tail, pid, reason)
       end
 
       def unsubscribe_all([], _pid, _reason) do
