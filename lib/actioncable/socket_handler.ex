@@ -42,18 +42,6 @@ defmodule Actioncable.SocketHandler do
         {:reply, {:text, "{\"type\":\"welcome\"}"}, req}
       end
 
-      def websocket_info(%{"action" => action, "args" => args, "channel" => channel}, state) do
-        resp = %{"identifier" => "{\"channel\":\"#{channel}\"}", "message" => %{"action" => action, "args" => args}}
-        message = Poison.encode!(resp)
-        {:reply, {:text, message}, state}
-      end
-
-      def websocket_info(%{"action" => action, "channel" => channel}, state) do
-        resp = %{"identifier" => "{\"channel\":\"#{channel}\"}", "message" => %{"action" => action}}
-        message = Poison.encode!(resp)
-        {:reply, {:text, message}, state}
-      end
-
       def websocket_info(%{"action" => action, "args" => args, "channel" => channel, "id" => id}, state) do
         resp = %{"identifier" => "{\"channel\":\"#{channel}\",\"id\":#{id}}", "message" => %{"action" => action, "args" => args}}
         message = Poison.encode!(resp)
@@ -62,6 +50,18 @@ defmodule Actioncable.SocketHandler do
 
       def websocket_info(%{"action" => action, "channel" => channel, "id" => id}, state) do
         resp = %{"identifier" => "{\"channel\":\"#{channel}\",\"id\":#{id}}", "message" => %{"action" => action}}
+        message = Poison.encode!(resp)
+        {:reply, {:text, message}, state}
+      end
+
+      def websocket_info(%{"action" => action, "args" => args, "channel" => channel}, state) do
+        resp = %{"identifier" => "{\"channel\":\"#{channel}\"}", "message" => %{"action" => action, "args" => args}}
+        message = Poison.encode!(resp)
+        {:reply, {:text, message}, state}
+      end
+
+      def websocket_info(%{"action" => action, "channel" => channel}, state) do
+        resp = %{"identifier" => "{\"channel\":\"#{channel}\"}", "message" => %{"action" => action}}
         message = Poison.encode!(resp)
         {:reply, {:text, message}, state}
       end
