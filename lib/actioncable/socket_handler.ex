@@ -127,18 +127,18 @@ defmodule Actioncable.SocketHandler do
       end
 
       def terminate(reason, _req, state) do
-        terminate_message = %{
-          "command" => "close_connection",
-          "identifier" => state["pid"],
-          "reason" => reason
-        }
-        handle_client_message(terminate_message)
         unsubscribe_all(state["channel"], state["pid"])
         :ok
       end
 
       def unsubscribe_all([head|tail], pid) do
+        terminate_message = %{
+          "command" => "close_connection",
+          "identifier" => head,
+          "reason" => reason
+        }
         Actioncable.Channel.unsubscribe(head, :erlang.pid_to_list(pid))
+        handle_client_message(terminate_message)
         unsubscribe_all(tail, pid)
       end
 
