@@ -33,7 +33,7 @@ defmodule GenservPid do
     if Map.has_key?(state, channel) do
       {:noreply, %{state | channel => pid}}
     else
-      {:noreply, %{Map.put(state, channel, pid}}
+      {:noreply, %{Map.put(state, channel, pid)}}
     end
   end
 end
