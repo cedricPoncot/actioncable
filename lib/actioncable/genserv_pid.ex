@@ -11,7 +11,7 @@ defmodule GenservPid do
   end
 
   @impl true
-  def handle_cast({:get, channel}, state) do
+  def handle_call({:get, channel}, state) do
     if Map.has_key?(state, channel) do
       {:reply, state[channel], state}
     else
@@ -20,7 +20,7 @@ defmodule GenservPid do
   end
 
   @impl true
-  def handle_call({:set, channel, pid}, _from, state) do
+  def handle_cast({:set, channel, pid}, _from, state) do
     {:noreply, %{state | channel => pid}}
   end
 end
