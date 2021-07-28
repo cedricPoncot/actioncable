@@ -11,7 +11,16 @@ defmodule GenservPid do
   end
 
   @impl true
-  def handle_call({:get, channel}, state) do
+  def handle_call({:get, channel}, _from, state) do
+    if Map.has_key?(state, channel) do
+      {:reply, state[channel], state}
+    else
+      {:reply, "", state}
+    end
+  end
+
+  @impl true
+  def handle_call({:get, channel}, _from, state) do
     if Map.has_key?(state, channel) do
       {:reply, state[channel], state}
     else
