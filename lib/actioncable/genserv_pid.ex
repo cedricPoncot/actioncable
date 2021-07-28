@@ -15,7 +15,7 @@ defmodule GenservPid do
     if Map.has_key?(state, channel) do
       {:reply, state[channel], state}
     else
-      {:reply, nil, state}
+      {:reply, "", state}
     end
   end
 
