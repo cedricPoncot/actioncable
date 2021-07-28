@@ -7,11 +7,13 @@ defmodule Actioncable.Channel do
     if pids != nil do
       if !Enum.member?(pids, pid) do
         pids = Poison.encode!(pids ++ [pid])
-        {:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
+        GenServer.call(GenservPid, {:set, channel, pids})
+        #{:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
       end
     else
       pids = Poison.encode!([pid])
-      {:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
+      GenServer.call(GenservPid, {:set, channel, pids})
+      #{:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
     end
   end
 
@@ -20,16 +22,19 @@ defmodule Actioncable.Channel do
     if pids != nil && Enum.member?(pids, pid) do
       pids = Enum.filter(pids, fn x -> x != pid && x != nil end)
       if pids == [] do
-        {:ok, _} = Redix.command(:redix_ac, ["SET", channel, nil])
+        GenServer.call(GenservPid, {:set, channel, pids})
+        #{:ok, _} = Redix.command(:redix_ac, ["SET", channel, nil])
       else
         pids = Poison.encode!(pids)
-        {:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
+        GenServer.call(GenservPid, {:set, channel, pids})
+        #{:ok, _} = Redix.command(:redix_ac, ["SET", channel, pids])
       end
     end
   end
 
   def get_channel(channel) do
-    {:ok, pids} = Redix.command(:redix_ac, ["GET", channel])
+    pids = GenServer.cast(GenservPid, {:get, channel})
+    #pids = Redix.command(:redix_ac, ["GET", channel])
     if pids != nil && pids != "" do
       Poison.decode!(pids)
     else
