@@ -29,7 +29,7 @@ defmodule GenservPid do
   end
 
   @impl true
-  def handle_cast({:set, channel, pid}, _from, state) do
+  def handle_cast({:set, channel, pid}, state) do
     {:noreply, %{state | channel => pid}}
   end
 end
