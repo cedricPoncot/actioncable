@@ -51,23 +51,6 @@ end
 This module has to `use Actioncable.SocketHandler`and implement `handle_client_message`function.
 
 
-### - 4) Start a Redix connection named `:redix_ac`
-(it will be used for storing websocket pid in corresponding channel.)
-
-In your application.ex :
-
-```elixir
-def start(_type, _args) do
-  children = [
-    %{
-      id: Redix,
-      start: {Redix, :start_link, ["redis://localhost:6379/0", [name: :redix_ac]]}
-    }
-  ]
-end
-```
-Of course, you can use any valid redis uri ("redis://localhost:6379/0" is just an example). You just have to name the redis connection :redix_ac.
-
 ### Usage
 
 - Receive message : As seen above, every message will be transfered in this function : `handle_client_message(message)` (In `SocketHandler` module)
